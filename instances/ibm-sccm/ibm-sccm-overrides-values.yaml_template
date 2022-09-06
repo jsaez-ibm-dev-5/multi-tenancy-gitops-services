@@ -28,6 +28,15 @@ ibm-sccm:
 
   service:
     type: ClusterIP
+    loadBalancerIP: ""
+    
+    # Load Balancer sources
+    # https://kubernetes.io/docs/concepts/services-networking/
+    # E.g -
+    # loadBalancerSourceRanges:
+    # - 10.10.10.0/24
+    #loadBalancerSourceRanges: []
+    
     externalTrafficPolicy: ""
     sessionAffinity: "ClientIP"
     swingConsole:
@@ -59,6 +68,7 @@ ibm-sccm:
     ccInterval: "2h"
     nprocLimit: "1048576"
     nofileLimit: "1048576"
+    DEBUG_SCRIPT: "false"
 
     #Control center database information
     productEntitilement: "CCD,CCM"
@@ -72,7 +82,7 @@ ibm-sccm:
     dbPartition: "false"
     dbDrivers: ${DBDRIVER}
     mssqlGlobal: "false"
-  
+
     weblistenAddress: "0.0.0.0"
     webHost: ${CLUSTER_DOMAIN}
     autoStopJavaWebAppServer: "true"
@@ -127,9 +137,11 @@ ibm-sccm:
     limits:
       cpu: 3000m
       memory: 4Gi
+      ephemeral-storage: "4Gi"
     requests:
       cpu: 1500m
       memory: 2Gi
+      ephemeral-storage: "2Gi"
 
   initResources:
     limits:
@@ -173,6 +185,15 @@ ibm-sccm:
     selector:
       label: ""
       value: ""
+      
+  # Manage Storage permission 
+  #storageSecurity:
+    # fsGroup -  Used for controlling access to block storage such as Ceph RBD, iSCSI, and some Cloud storage.
+    #fsGroup: ""
+    # supplementalGroups - supplemental Groups IDs are used for controlling access to shared storage like NFS and GlusterFS
+    # Replace supplementalGroup Id with NFS User's groupId if the root squash is enabled on NFS server otherwise volume access will fail
+    #supplementalGroups: [65534]
+    
   # liveness and Probeness
   livenessProbe:
     initialDelaySeconds: 175
@@ -203,9 +224,34 @@ ibm-sccm:
   arch: "amd64"
 
   # Change license to true to indicate that you have read and agree to license agreements
-  # Refer: http://www-03.ibm.com/software/sla/sladb.nsf (L/N: L-KNAN-C6VGE3)
+  # Refer: https://www-40.ibm.com/software/sla/sladb.nsf (L/N: L-KNAN-C6VGE3)
   license: true
 
   # Specify the license edition as per license agreement. Valid value is prod or non-prod for Production and 
   # Non-production respectively. Remember that this parameter is crucial for IBM Licensing and Metering Service
   licenseType: non-prod
+
+  # Set network policy
+  # https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  networkPolicy:
+    # apply policy type
+    policyTypes:
+    - Ingress
+    - Egress
+    
+    # apply ingress rule. Default allow all ingress traffic.
+    ingress:
+    - from:
+      ports:
+      - protocol: TCP
+        port: 58080
+      - protocol: TCP
+        port: 58081
+      - protocol: TCP
+        port: 58082
+      - protocol: TCP
+        port: 58083
+        
+    # apply egress rule. Default allow all egress traffic 
+    egress: 
+    - {}
