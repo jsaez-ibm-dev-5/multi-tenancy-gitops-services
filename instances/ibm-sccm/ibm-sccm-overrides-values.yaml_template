@@ -189,10 +189,10 @@ ibm-sccm:
   # Manage Storage permission 
   #storageSecurity:
     # fsGroup -  Used for controlling access to block storage such as Ceph RBD, iSCSI, and some Cloud storage.
-    #fsGroup: ""
+    fsGroup: 1010
     # supplementalGroups - supplemental Groups IDs are used for controlling access to shared storage like NFS and GlusterFS
     # Replace supplementalGroup Id with NFS User's groupId if the root squash is enabled on NFS server otherwise volume access will fail
-    #supplementalGroups: [65534]
+    supplementalGroups: [5555]
     
   # liveness and Probeness
   livenessProbe:
