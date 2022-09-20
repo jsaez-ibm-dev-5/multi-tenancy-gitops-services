@@ -8,5 +8,5 @@ dependencies:
     version: 0.5.0
     repository: https://charts.cloudnativetoolkit.dev
   - name: ibm-sccm
-    version: 1.0.12
+    version: 1.0.13
     repository: https://jsaez-ibm.github.io/gitops-testing
