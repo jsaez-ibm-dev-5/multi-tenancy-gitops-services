@@ -206,7 +206,7 @@ ibm-sccm:
     periodSeconds: 120
     
   secret:
-    secretName:  "ibm-sccm-secret"
+    secretName: "ibm-sccm-secret"
     certsSecretName: "ibm-sccm-jks-certs-secret"
 
   dashboard:
