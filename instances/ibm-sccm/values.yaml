@@ -73,7 +73,7 @@ ibm-sccm:
     #Control center database information
     productEntitilement: "CCD,CCM"
     dbType: "DB2"
-    dbHost: "172.21.41.108"
+    dbHost: "172.21.184.220"
     dbPort: "50000"
     dbUser: "db2inst1"
     dbName: "SCCDB"
